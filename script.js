@@ -11,7 +11,6 @@
 
     $("html").keydown(function (e) {
         if (e.which == 13 && chatActive) {
-            console.log('oui')
             socket.emit('newMessage', {room:room,message:$('#message').val(),files:filesList, id:token})
             $("#message").val("");
             $('.file-preview').empty()
@@ -25,7 +24,6 @@
     });
     
     $('#logBtn').click((e)=>{
-        console.log('ok?')
         e.preventDefault()
         socket.emit('dataPseudo', {pseudo: $('#pseudo').val(), id:token})
         $('#pseudo').val('')
@@ -49,7 +47,6 @@
 
     })
     socket.on('newUserJoin', data=>{
-        console.log('un utilisateur a join')
         $(".msg-list>.global").append(`
         <div class="message ${data.Bot.pseudo} actual">
             <div class="user">
@@ -73,7 +70,6 @@
     })
 
     socket.on('newUserMessage', data=>{
-        console.log('nvo msg', data)
         var files = null
         if(data.messageInfo.files){
             files = data.messageInfo.files
@@ -86,7 +82,6 @@
             var isLink = false
             var isImage = false 
             var wordLowerCase = word.toLowerCase()
-            console.log(checkLink)
             if(word.substring(word.length - 4) == ".jpg" || word.substring(word.length - 4) == ".png" ){
                 isImage = true
             }
@@ -252,7 +247,6 @@
     }
     
     function newMP(data) {
-        console.log(data)
         socket.emit("new-mp", {data:data, id:token});
         var className = data.senderID + data.data.id;
         var className2 = data.data.id + data.senderID;
@@ -291,12 +285,10 @@
     }
 
     socket.on("new-mp", (data) => {
-        console.log(data)
         var sender = data.dataNewMp.data.senderID;
         var receiver = data.dataNewMp.data.data.id;
         var className = sender + receiver;
         var className2 = receiver + sender;
-        console.log('1', className, "2", className2)
         if ($(".msg-list> ." + className + "").length) {
             $(".select-room> ." + className + "").css("display", "flex");
         } else {

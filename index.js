@@ -24,7 +24,6 @@ io.on('connection', (socket)=>{
         tokenList.push(socket.id)
         socket.emit('get-token', socket.id)
         if(listMsg){
-            console.log('---------------------------------------')
             listMsg.map(message=>{
                 var messageInfo = message
                 socket.emit('newUserMessage', {messageInfo})
@@ -70,7 +69,6 @@ io.on('connection', (socket)=>{
                     files:dataMessage.files
                 }
                 if(messageInfo.room == "global"){
-                    console.log('oui')
                     listMsg.push(messageInfo)
                 }
                 io.emit('newUserMessage', {messageInfo})
@@ -140,8 +138,6 @@ function getUser(id){
     var userPseudo = null
     userArrayList.map(user=>{
         if(user.id == id){
-            console.log('-------------')
-            console.log("oui c bueno la", user.pseudo)
             userPseudo =  user.pseudo
         }
     })
@@ -151,8 +147,6 @@ function getImage(id){
     var userImage = null
     userArrayList.map(user=>{
         if(user.id == id){
-            console.log('-------------')
-            console.log("oui c bueno la", user)
             userImage=  user.image
         }
     })
