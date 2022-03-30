@@ -392,17 +392,18 @@ function removeFile(id) {
     $("." + id + "").remove();
 }
 
-setInterval(() => {
-    if($('#message').val().length > 1){
+function writer(val){
+    if($('#message').val().length > 0){
         socket.emit('is-writing', {write:true, id:token})
     }else{
+        console.log('ok ca envoie false')
         socket.emit('is-writing', {write:false, id:token})
-    }    
-}, 1000);
+    }  
+}  
 
 socket.on('is-writing', (usersWriting)=>{
 //envoyer le pseudo par l'id du mec qui envoie la requete et comparer ici nsm
-
+console.log(usersWriting)
     $('.typing-list').empty()
         if(usersWriting.length){
                 $('.typing-list').append(`

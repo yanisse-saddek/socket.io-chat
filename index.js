@@ -105,8 +105,11 @@ io.on('connection', (socket)=>{
                 if(!usersWriting.includes(writingUser)){
                     usersWriting.push(writingUser)
                 }
+            }else{
+                console.log('ca suprime')
+                usersWriting.splice(writingUserIndex, 1)
             }
-
+            console.log(usersWriting)
 
                 socket.broadcast.emit('is-writing', usersWriting)
         }
