@@ -23,6 +23,7 @@ $("html").keydown(function (e) {
         $(".file-preview").empty();
         filesList = [];
         imageid = [];
+        socket.emit('is-writing', {write:false, id:token})
     } else if (e.which == 13 && chatActive == false) {
         socket.emit("dataPseudo", { pseudo: $("#pseudo").val(), id: token });
         $("#pseudo").val("");
@@ -383,3 +384,22 @@ function removeFile(id) {
     filesList.splice(id - 1, 1);
     $("." + id + "").remove();
 }
+
+function writer(val){
+    setTimeout(() => {
+        socket.emit('is-writing', {write:val, id:token})
+    }, 1000);
+}
+socket.on('is-writing', (usersWriting)=>{
+    $('.typing-list').empty()
+    console.log(usersWriting)
+        if(usersWriting.length){
+                $('.typing-list').append(`
+                <p>${            
+                    usersWriting.map(userWriting=>{
+                        return userWriting
+                    })
+                } est en train d'écrire<p>
+            `)
+        }
+})

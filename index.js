@@ -19,6 +19,7 @@ var images = [
     "https://theawesomedaily.com/wp-content/uploads/2018/03/cats-wearing-glassess-25-1.jpeg",
 ];
 var listMsg = []
+var usersWriting = []
 io.on('connection', (socket)=>{
     socket.on('get-token', ()=>{
         tokenList.push(socket.id)
@@ -89,6 +90,37 @@ io.on('connection', (socket)=>{
             io.emit('is-active', userArrayList)
         }
     })
+    socket.on('is-writing', dataWriting=>{
+        if(tokenList.includes(dataWriting.id)){
+            var writingUser = null
+            var writingUserIndex = null
+            userArrayList.map((user, index)=>{
+                if(user.id == dataWriting.id){
+                    writingUser = user.pseudo
+                    writingUserIndex = index
+                }
+            })
+            if(dataWriting.write){
+                if(!usersWriting.includes(writingUser)){
+                    usersWriting.push(writingUser)
+                }
+            }else{
+                console.log(writingUserIndex)
+                usersWriting.splice(writingUserIndex, 1)
+            }
+            var filterWritingList = []
+            userArrayList.map(user=>{
+                if(user.id !== dataWriting.id){
+                    console.log(user.id, dataWriting.id)
+                    if(!filterWritingList.includes(writingUser)){
+                    filterWritingList.push(writingUser)
+                    }
+                }
+            })
+            console.log('ceux qui ecrivent laaaaaa', usersWriting)
+                socket.broadcast.emit('is-writing', usersWriting)
+        }
+    })
 
     socket.on('disconnect', () =>{
         userArrayList.map((user, index)=>{
@@ -96,9 +128,7 @@ io.on('connection', (socket)=>{
             userArrayList.splice(index, 1)
            }
         })
-        // countConnected--
         io.emit('user-count', userArrayList.length)
-        // io.emit('leave-message', socket.leaveMsg)
     })
     socket.on('new-mp', (dataNewMp)=>{
         if(tokenList.includes(dataNewMp.id)){
@@ -109,7 +139,6 @@ io.on('connection', (socket)=>{
         })
         }
     })
-
 })
 
 server.listen(process.env.PORT || 3000, () => {
