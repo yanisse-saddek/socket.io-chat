@@ -83,6 +83,7 @@ $("#btn").click(() => {
 
 socket.on("newUserMessage", (data) => {
     var files = null;
+    console.log(data.messageInfo.files)
     if (data.messageInfo.files) {
         files = data.messageInfo.files;
     }
@@ -352,15 +353,20 @@ function validateAndUpload(input){
     var URL = window.URL || window.webkitURL;
     var file = input.files[0];
 
-    if (file) { 
-        var image = new Image();
-        image.onload = function() {
+    if (file){
+        console.log(typeof file.size)
+        if(file.size > 60000){
+            console.log('image trop lourde putin!')
+        } else{
+            var image = new Image();
+            image.onload = function() {
             if (this.width) {
                 var uploaded_image = "";
                 const reader = new FileReader();
                 reader.addEventListener("load", () => {
+                    console.log('c une img')
                     uploaded_image = reader.result;
-
+                    console.log('uploaded', file)
                     var newImgId = "image" + (imageId.length + 1);
                     imageId.push(newImgId);
                     filesList.push(uploaded_image);
@@ -376,6 +382,7 @@ function validateAndUpload(input){
         };
 
         image.src = URL.createObjectURL(file);
+        }
     }
 }
 
@@ -385,14 +392,18 @@ function removeFile(id) {
     $("." + id + "").remove();
 }
 
-function writer(val){
-    setTimeout(() => {
-        socket.emit('is-writing', {write:val, id:token})
-    }, 1000);
-}
+setInterval(() => {
+    if($('#message').val().length > 1){
+        socket.emit('is-writing', {write:true, id:token})
+    }else{
+        socket.emit('is-writing', {write:false, id:token})
+    }    
+}, 1000);
+
 socket.on('is-writing', (usersWriting)=>{
+//envoyer le pseudo par l'id du mec qui envoie la requete et comparer ici nsm
+
     $('.typing-list').empty()
-    console.log(usersWriting)
         if(usersWriting.length){
                 $('.typing-list').append(`
                 <p>${            
@@ -402,4 +413,5 @@ socket.on('is-writing', (usersWriting)=>{
                 } est en train d'écrire<p>
             `)
         }
+
 })

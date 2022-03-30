@@ -71,6 +71,7 @@ io.on('connection', (socket)=>{
                     room:escapeHtml(dataMessage.room),
                     files:dataMessage.files
                 }
+                console.log(messageInfo.files)
                 if(messageInfo.room == "global"){
                     listMsg.push(messageInfo)
                 }
@@ -104,20 +105,9 @@ io.on('connection', (socket)=>{
                 if(!usersWriting.includes(writingUser)){
                     usersWriting.push(writingUser)
                 }
-            }else{
-                console.log(writingUserIndex)
-                usersWriting.splice(writingUserIndex, 1)
             }
-            var filterWritingList = []
-            userArrayList.map(user=>{
-                if(user.id !== dataWriting.id){
-                    console.log(user.id, dataWriting.id)
-                    if(!filterWritingList.includes(writingUser)){
-                    filterWritingList.push(writingUser)
-                    }
-                }
-            })
-            console.log('ceux qui ecrivent laaaaaa', usersWriting)
+
+
                 socket.broadcast.emit('is-writing', usersWriting)
         }
     })
