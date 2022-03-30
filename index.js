@@ -71,7 +71,6 @@ io.on('connection', (socket)=>{
                     room:escapeHtml(dataMessage.room),
                     files:dataMessage.files
                 }
-                console.log(messageInfo.files)
                 if(messageInfo.room == "global"){
                     listMsg.push(messageInfo)
                 }
@@ -106,11 +105,12 @@ io.on('connection', (socket)=>{
                     usersWriting.push(writingUser)
                 }
             }else{
-                console.log('ca suprime')
                 usersWriting.splice(writingUserIndex, 1)
             }
+
             console.log(usersWriting)
 
+            console.log('ceux qui ecrivent laaaaaa', usersWriting)
                 socket.broadcast.emit('is-writing', usersWriting)
         }
     })
