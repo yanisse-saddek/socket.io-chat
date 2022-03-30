@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app">
+        <div class="login">
+            <div class="login-form">
+                <p>Entre un pseudo pour proute prouter</p>
+                <div class="error-msg">
+                    <p class="already-exist" style="display:none">Le pseudo est déjà prit</p>
+                    <p class="too-short" style="display:none">Votre pseudo est trop court</p>
+                    <p class="too-long" style="display:none">Votre pseudo est trop long</p>
+                </div>
+                <input type="text" id="pseudo">
+                <input type="submit" id="logBtn">    
+            </div>
+        </div>
+        <div class="container">
+            <div class="main">
+                <div class="user-section">
+                    <div class="user-count">
+                        <p>Utilisateurs connectés (<span class="count-user">0</span>)</p>
+                    </div>
+                    <div class="user-list">  
+                                              
+                    </div>    
+                </div>
+                <div class="chat">
+                    <div class="select-room">
+                        <div class="global room">
+                            <p onclick="openMP('global')">Chat global</p>
+                        </div>
+                    </div>
+                    <div class="msg-list" id="msg-list">
+                        <div class="global">
+
+                        </div>
+                    </div>
+                    <div class="input-field">
+                        <div class="file-preview">
+
+                        </div>
+                        <div class="btn">
+                            <input type="text" class="input-txt" id="message">
+                            <input type="file" id="image_input" accept="image/png, image/jpg">
+                            <input type="submit" class="input-btn" id="btn">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="node_modules/socket.io/client-dist/socket.io.js"></script>
+<script src="script.js"></script>
+</html>
+
+
+

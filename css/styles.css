@@ -1,0 +1,213 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300&display=swap');
+
+:root{
+	--primary:gray;
+	--secondary:white;
+	--third:black;
+}
+*{
+	margin:0;
+	font-family: 'Nunito Sans', sans-serif;
+}
+.app{
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	width:100%;
+	height:100vh;
+	background-color: var(--third)
+}
+.login{
+	position: absolute;
+	height:100%;
+	width:100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.login-form{
+	padding:3rem;
+	background-color: var(--secondary);
+	border-radius: 30px;
+}
+.container{
+	width:100%;
+	height:100vh;
+}
+.top-btn{
+	display: flex;
+	background-color: var(--primary);
+	align-items: center;
+	justify-content: space-around;
+	height:10%
+}
+
+.main{
+	height:100%;
+	display:flex;
+}
+.chat{
+	display: flex;
+	flex-direction: column;
+	height:100%;
+	width:80%;
+}
+.select-room{
+	background-color: khaki;
+	padding:10px;
+	display: flex;
+}
+.select-room p{
+	background-color: orange;
+	padding:5px;
+	border-radius: 30px;
+	cursor: pointer;
+}
+.select-room .room{
+	display: flex;
+	background-color: orange;
+	align-items: center;
+	justify-content: center;
+	border-radius: 30px;
+	padding:3px;
+}
+.msg-list{
+	background-color: var(--primary);
+	height:90%;
+	overflow-y: auto;
+}
+.user-section{
+	background-color: var(--secondary);
+	height:100%;
+	width:20%;
+	font-size: 0.7rem;
+	overflow-y: auto;
+}
+.user-count{
+	height:30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: bold;
+}
+.user-list{
+	padding:0.2rem;
+}
+.message{
+	padding:10px;
+	background-color: lightgray;
+	margin-bottom:1px
+}
+.message .user{
+	display: flex;
+	align-items: center;
+}
+.message .user .name{
+	font-size: 1.2rem;
+	font-weight: bold;
+}
+.message .text{
+	overflow: hidden;
+}
+.message .user img{
+	height:30px;
+	width:30px;
+	border-radius: 30px;
+	margin-right:10px;
+}
+.input-field{
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: space-between;
+	background-color: var(--third);
+	padding:10px
+}
+.file-preview{
+	width:100%;
+	display: flex;
+}
+.file-preview div{
+	margin-right:10px;
+}
+.image-preview{
+	position: relative;
+}
+.close-btn{
+	position: absolute;
+}
+.input-field .input-txt{
+	width:80%;
+	border:none;
+	padding:10Px;
+	border-radius: 30px;
+	background-color: var(--secondary);
+}
+.input-field .input-txt:focus{
+	outline:none
+}
+.input-field .input-btn{
+	border:none;
+	padding:10Px;
+	border-radius: 30px;
+	background-color: var(--secondary);
+}
+.user-card{
+	display:flex;
+	align-items: center;
+	background-color: var(--secondary);
+	padding:0.2rem;
+}
+.pdp{
+	margin-right:10px;
+	height:30px; 
+	width:30px;
+	border-radius:30px;
+}
+.actif{
+	height:10px;
+	width:10px;
+	background-color: greenyellow;
+	border-radius: 30px;
+}
+.inactif{
+	height:10px;
+	width:10px;
+	background-color: rgb(255, 217, 0);
+	border-radius: 30px;
+}
+.action-btn{
+	display:flex;
+	width:20%;
+}
+.action-btn img{
+	height:15px;
+	width:15px;
+}
+.info{
+	display: flex;
+	align-items: center;
+	width:60%;
+}
+.state{
+	width:20%;
+}
+
+.close{
+	color:red;
+	background-color: white !important;
+	border-radius: 30px;
+	height:20px;
+	width:20px;
+	text-align: center;
+}
+
+.new-msg{
+	background-color: red !important;
+}
+.messageImg{
+	max-width:200px;
+	max-height:100px;
+}
