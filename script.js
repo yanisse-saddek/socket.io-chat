@@ -5,11 +5,13 @@
     var room = "global"
     var lastMsg = ""
     var lastMsgPv = null
+    var chatActive = false
     socket.emit('get-token')
     socket.on('get-token', newToken=>{token=newToken})
 
     $("html").keydown(function (e) {
         if (e.which == 13 && chatActive) {
+            console.log('oui')
             socket.emit('newMessage', {room:room,message:$('#message').val(),files:filesList, id:token})
             $("#message").val("");
             $('.file-preview').empty()
@@ -43,6 +45,8 @@
                 </div>
             </div>
         `);
+        chatActive = true
+
     })
     socket.on('newUserJoin', data=>{
         console.log('un utilisateur a join')
