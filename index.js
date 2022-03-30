@@ -38,23 +38,25 @@ io.on('connection', (socket)=>{
                 isNew = false
             }
         })        
-        if(tokenList.includes(dataPseudo.id) && isNew && dataPseudo.pseudo.length > 4){
-            var rand = Math.floor(Math.random() * images.length)
-            var randImg = images[rand]
-            var newUser = {
-                id:escapeHtml(socket.id), 
-                pseudo:escapeHtml(dataPseudo.pseudo),
-                image:randImg,
+        if(tokenList.includes(dataPseudo.id)){
+            if(isNew && dataPseudo.pseudo.length > 4){
+                var rand = Math.floor(Math.random() * images.length)
+                var randImg = images[rand]
+                var newUser = {
+                    id:escapeHtml(socket.id), 
+                    pseudo:escapeHtml(dataPseudo.pseudo),
+                    image:randImg,
+                }
+                var Bot = {
+                    pseudo:"Bot", 
+                    image:"https://theawesomedaily.com/wp-content/uploads/2018/03/cats-wearing-glassess-25-1.jpeg",
+                    date:getDate()
+                }
+                userArrayList.push(newUser)
+                socket.emit('join', {newUser, Bot})
+                socket.broadcast.emit('newUserJoin', {newUser, Bot})
+                io.emit('user-count', userArrayList.length)    
             }
-            var Bot = {
-                pseudo:"Bot", 
-                image:"https://theawesomedaily.com/wp-content/uploads/2018/03/cats-wearing-glassess-25-1.jpeg",
-                date:getDate()
-            }
-            userArrayList.push(newUser)
-            socket.emit('join', {newUser, Bot})
-            socket.broadcast.emit('newUserJoin', {newUser, Bot})
-            io.emit('user-count', userArrayList.length)
         }
     })
     socket.on('newMessage', dataMessage=>{
@@ -129,10 +131,10 @@ function escapeHtml(text) {
 }
 function getDate(){
     var date = new Date();
-    var hour = date.getHours();
+    var hour = date.getHours()+2;
     var minutes = date.getMinutes();
     var heureMinute = hour.toString() + ":" + minutes.toString();
-    return heureMinute
+    return heureMinute  
 }
 function getUser(id){
     var userPseudo = null
