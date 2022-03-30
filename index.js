@@ -53,17 +53,19 @@ io.on('connection', (socket)=>{
         }
     })
     socket.on('newMessage', dataMessage=>{
-        if(tokenList.includes(dataMessage.id) && dataMessage.message || dataMessage.files){
-            var messageInfo = {
-                message:escapeHtml(dataMessage.message),
-                date:getDate(),
-                user:getUser(dataMessage.id),
-                image:getImage(dataMessage.id),
-                room:escapeHtml(dataMessage.room),
-                files:dataMessage.files
+        if(tokenList.includes(dataMessage.id)){
+            if(dataMessage.message || dataMessage.files){
+                var messageInfo = {
+                    message:escapeHtml(dataMessage.message),
+                    date:getDate(),
+                    user:getUser(dataMessage.id),
+                    image:getImage(dataMessage.id),
+                    room:escapeHtml(dataMessage.room),
+                    files:dataMessage.files
+                }
+                io.emit('newUserMessage', {messageInfo})
+                socket.broadcast.emit('room-msg', dataMessage.room)    
             }
-            io.emit('newUserMessage', {messageInfo})
-            socket.broadcast.emit('room-msg', dataMessage.room)
         }
     })
     
