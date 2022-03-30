@@ -242,29 +242,6 @@ socket.on("is-active", (data) => {
     }
 });
 
-const image_input = document.querySelector("#image_input");
-var uploaded_image = "";
-image_input.addEventListener("change", function () {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => {
-        uploaded_image = reader.result;
-        var newImgId = "image" + (imageId.length + 1);
-        imageId.push(newImgId);
-        filesList.push(uploaded_image);
-        $(".file-preview").append(`
-    <div class="image-preview ${newImgId}">
-    <div class="close close-btn" onClick="removeFile('${newImgId}')">x</div>
-        <img height="80px" src="${uploaded_image}"/>
-    </div>
-    `);
-    });
-    reader.readAsDataURL(this.files[0]);
-});
-
-function removeFile(id) {
-    filesList.splice(id - 1, 1);
-    $("." + id + "").remove();
-}
 
 function newMP(data) {
     socket.emit("new-mp", { data: data, id: token });
@@ -364,3 +341,45 @@ socket.on("room-msg", (roomMsg) => {
         $(".select-room > ." + roomMsg + " ").addClass("new-msg");
     }
 });
+
+
+
+
+
+
+function validateAndUpload(input){
+    var URL = window.URL || window.webkitURL;
+    var file = input.files[0];
+
+    if (file) { 
+        var image = new Image();
+        image.onload = function() {
+            if (this.width) {
+                var uploaded_image = "";
+                const reader = new FileReader();
+                reader.addEventListener("load", () => {
+                    uploaded_image = reader.result;
+
+                    var newImgId = "image" + (imageId.length + 1);
+                    imageId.push(newImgId);
+                    filesList.push(uploaded_image);
+                    $(".file-preview").append(`
+                    <div class="image-preview ${newImgId}">
+                    <div class="close close-btn" onClick="removeFile('${newImgId}')">x</div>
+                        <img height="80px" src="${uploaded_image}"/>
+                    </div>
+                    `);
+                });
+                reader.readAsDataURL(file);
+            }
+        };
+
+        image.src = URL.createObjectURL(file);
+    }
+}
+
+
+function removeFile(id) {
+    filesList.splice(id - 1, 1);
+    $("." + id + "").remove();
+}
