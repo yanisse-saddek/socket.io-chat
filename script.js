@@ -74,7 +74,10 @@
 
     socket.on('newUserMessage', data=>{
         console.log('nvo msg', data)
-        files = data.messageInfo.files
+        var files = null
+        if(data.messageInfo.files){
+            files = data.messageInfo.files
+        }
         message = data.messageInfo.message.split(' ');
         var messageHTML = ""
         var imageHTML = ""

@@ -18,11 +18,18 @@ var images = [
     "https://theawesomedaily.com/wp-content/uploads/2018/03/cats-wearing-glassess-26-1.jpeg",
     "https://theawesomedaily.com/wp-content/uploads/2018/03/cats-wearing-glassess-25-1.jpeg",
 ];
-
+var listMsg = []
 io.on('connection', (socket)=>{
     socket.on('get-token', ()=>{
         tokenList.push(socket.id)
         socket.emit('get-token', socket.id)
+        if(listMsg){
+            console.log('---------------------------------------')
+            listMsg.map(message=>{
+                var messageInfo = message
+                socket.emit('newUserMessage', {messageInfo})
+            })
+        }
     })
 
     socket.on('dataPseudo', dataPseudo=>{
@@ -49,7 +56,6 @@ io.on('connection', (socket)=>{
             socket.emit('join', {newUser, Bot})
             socket.broadcast.emit('newUserJoin', {newUser, Bot})
             io.emit('user-count', userArrayList.length)
-            console.log(userArrayList)
         }
     })
     socket.on('newMessage', dataMessage=>{
@@ -62,6 +68,10 @@ io.on('connection', (socket)=>{
                     image:getImage(dataMessage.id),
                     room:escapeHtml(dataMessage.room),
                     files:dataMessage.files
+                }
+                if(messageInfo.room == "global"){
+                    console.log('oui')
+                    listMsg.push(messageInfo)
                 }
                 io.emit('newUserMessage', {messageInfo})
                 socket.broadcast.emit('room-msg', dataMessage.room)    
