@@ -8,6 +8,20 @@
     socket.emit('get-token')
     socket.on('get-token', newToken=>{token=newToken})
 
+    $("html").keydown(function (e) {
+        if (e.which == 13 && chatActive) {
+            socket.emit('newMessage', {room:room,message:$('#message').val(),files:filesList, id:token})
+            $("#message").val("");
+            $('.file-preview').empty()
+            filesList = []
+            imageid = []
+    
+        } else if (e.which == 13 && chatActive == false) {
+            socket.emit('dataPseudo', {pseudo: $('#pseudo').val(), id:token})
+            $('#pseudo').val('')
+        }
+    });
+    
     $('#logBtn').click((e)=>{
         console.log('ok?')
         e.preventDefault()

@@ -36,7 +36,7 @@ io.on('connection', (socket)=>{
             var rand = Math.floor(Math.random() * images.length)
             var randImg = images[rand]
             var newUser = {
-                id:socket.id, 
+                id:escapeHtml(socket.id), 
                 pseudo:escapeHtml(dataPseudo.pseudo),
                 image:randImg,
             }
