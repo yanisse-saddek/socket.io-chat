@@ -34,6 +34,7 @@ io.on('connection', (socket)=>{
     })
     socket.on('dataPseudo', dataPseudo=>{
         var isNew = true
+        console.log(dataPseudo)
         userArrayList.map(user=>{
             if(user.id == dataPseudo.id){
                 isNew = false
