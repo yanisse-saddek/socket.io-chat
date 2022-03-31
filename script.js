@@ -419,7 +419,11 @@ socket.on('is-writing', (usersWriting)=>{
 
 })
 
-
+socket.on('deco', ()=>{
+    $(".user-list").empty();
+    $(".login").css("display", "flex");
+    chatActive = false
+})
 function disconnect(){
     socket.emit('deco')
     $(".user-list").empty();
