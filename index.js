@@ -11,6 +11,7 @@ app.get('/*', (req, res)=>{
 })
 
 var tokenList = ["token"]
+var tokenAdmin = ['admin']
 var images = [
     "https://theawesomedaily.com/wp-content/uploads/2018/03/cats-wearing-glassess-29-1.jpg",
     "https://theawesomedaily.com/wp-content/uploads/2018/03/cats-wearing-glassess-28-1.jpeg",
@@ -31,9 +32,9 @@ io.on('connection', (socket)=>{
             })
         }
     })
-
     socket.on('dataPseudo', dataPseudo=>{
         var isNew = true
+        console.log("-----", userArrayList)
         userArrayList.map(user=>{
             if(user.id == dataPseudo.id){
                 isNew = false
@@ -63,23 +64,36 @@ io.on('connection', (socket)=>{
     socket.on('newMessage', dataMessage=>{
         if(tokenList.includes(dataMessage.id)){
             if(dataMessage.message || dataMessage.files){
-                var messageInfo = {
-                    message:escapeHtml(dataMessage.message),
-                    date:getDate(),
-                    user:getUser(dataMessage.id),
-                    image:getImage(dataMessage.id),
-                    room:escapeHtml(dataMessage.room),
-                    files:dataMessage.files
+                console.log(dataMessage)
+                if(getUser(dataMessage.id)){
+                    var messageInfo = {
+                        message:escapeHtml(dataMessage.message),
+                        date:getDate(),
+                        user:getUser(dataMessage.id),
+                        image:getImage(dataMessage.id),
+                        room:escapeHtml(dataMessage.room),
+                        files:dataMessage.files
+                    }
+                    if(messageInfo.room == "global"){
+                        listMsg.push(messageInfo)
+                    }
+                    io.emit('newUserMessage', {messageInfo})
+                    socket.broadcast.emit('room-msg', dataMessage.room)        
+                }else{
+                    socket.emit('deco')
                 }
-                if(messageInfo.room == "global"){
-                    listMsg.push(messageInfo)
-                }
-                io.emit('newUserMessage', {messageInfo})
-                socket.broadcast.emit('room-msg', dataMessage.room)    
             }
         }
     })
-    
+    socket.on('new-mp', (dataNewMp)=>{
+        if(tokenList.includes(dataNewMp.id)){
+            userArrayList.map(user=>{
+            if(user.id == dataNewMp.id){
+                io.to(dataNewMp.data.data.id).emit('new-mp', {dataNewMp, user})
+            }
+        })
+        }
+    })
     socket.on('is-active', dataActive=>{
         if(tokenList.includes(dataActive.id)){
             userArrayList.map((user, index)=>{
@@ -107,14 +121,17 @@ io.on('connection', (socket)=>{
             }else{
                 usersWriting.splice(writingUserIndex, 1)
             }
-
-            console.log(usersWriting)
-
-            console.log('ceux qui ecrivent laaaaaa', usersWriting)
                 socket.broadcast.emit('is-writing', usersWriting)
         }
     })
-
+    socket.on('deco', ()=>{
+        userArrayList.map((user, index)=>{
+            if(user.id == socket.id){
+             userArrayList.splice(index, 1)
+            }
+         })
+         console.log("USER MACHINNNN" , userArrayList)
+    })
     socket.on('disconnect', () =>{
         userArrayList.map((user, index)=>{
            if(user.id == socket.id){
@@ -123,20 +140,10 @@ io.on('connection', (socket)=>{
         })
         io.emit('user-count', userArrayList.length)
     })
-    socket.on('new-mp', (dataNewMp)=>{
-        if(tokenList.includes(dataNewMp.id)){
-            userArrayList.map(user=>{
-            if(user.id == dataNewMp.id){
-                io.to(dataNewMp.data.data.id).emit('new-mp', {dataNewMp, user})
-            }
-        })
-        }
-    })
 })
 
 server.listen(process.env.PORT || 3000, () => {
 });
-
 
 function escapeHtml(text) {
     var map = {

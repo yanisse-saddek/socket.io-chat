@@ -1,4 +1,5 @@
-var socket = io();
+var socket = io()
+
 var token = null;
 var imageId = [];
 var filesList = [];
@@ -200,10 +201,12 @@ socket.on("user-count", (count) => {
 });
 
 setInterval(() => {
-    if (!document.hidden) {
-        socket.emit("is-active", { pseudo: pseudo, actif: "actif", id: token });
-    } else {
-        socket.emit("is-active", { pseudo: pseudo, actif: "inactif", id: token });
+    if(chatActive){
+        if (!document.hidden) {
+            socket.emit("is-active", { pseudo: pseudo, actif: "actif", id: token });
+        } else {
+            socket.emit("is-active", { pseudo: pseudo, actif: "inactif", id: token });
+        }
     }
 }, 1000);
 
@@ -355,7 +358,7 @@ function validateAndUpload(input){
 
     if (file){
         console.log(typeof file.size)
-        if(file.size > 60000){
+        if(file.size > 600000){
             console.log('image trop lourde putin!')
         } else{
             var image = new Image();
@@ -415,3 +418,15 @@ socket.on('is-writing', (usersWriting)=>{
         }
 
 })
+
+
+function disconnect(){
+    socket.emit('deco')
+    $(".user-list").empty();
+    $(".login").css("display", "flex");
+    chatActive = false
+}
+
+setInterval(() => {
+    socket.emit('ping', {actif:true, id:token});
+}, 1000);
