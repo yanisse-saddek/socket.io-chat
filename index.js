@@ -173,7 +173,9 @@ function getUser(id){
             userPseudo =  user.pseudo
         }
     })
-    return userPseudo
+    if(userPseudo !== null){
+        return userPseudo
+    }
 }
 function getImage(id){
     var userImage = null
