@@ -64,7 +64,7 @@ io.on('connection', (socket)=>{
         if(tokenList.includes(dataMessage.id)){
             if(dataMessage.message || dataMessage.files){
                 console.log(getUser(dataMessage.id))
-                if(getUser(dataMessage.id)){
+                if(getUser(dataMessage.id) !== undefined){
                     console.log(getUser(dataMessage.id))
                     var messageInfo = {
                         message:escapeHtml(dataMessage.message),
