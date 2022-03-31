@@ -63,9 +63,9 @@ io.on('connection', (socket)=>{
     socket.on('newMessage', dataMessage=>{
         if(tokenList.includes(dataMessage.id)){
             if(dataMessage.message || dataMessage.files){
-                console.log(getUser(dataMessage.id))
+                console.log("en dehors nn", getUser(dataMessage.id))
                 if(getUser(dataMessage.id) !== undefined){
-                    console.log(getUser(dataMessage.id))
+                    console.log(getUser("c bon laaaaaa -------->" ,dataMessage.id))
                     var messageInfo = {
                         message:escapeHtml(dataMessage.message),
                         date:getDate(),
@@ -79,9 +79,10 @@ io.on('connection', (socket)=>{
                     }
                     io.emit('newUserMessage', {messageInfo})
                     socket.broadcast.emit('room-msg', dataMessage.room)        
-                }else{
-                    socket.emit('deco')
                 }
+                // else{
+                //     socket.emit('deco')
+                // }
             }
         }
     })
