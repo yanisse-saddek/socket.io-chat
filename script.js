@@ -25,7 +25,8 @@ $("html").keydown(function (e) {
         filesList = [];
         imageid = [];
         socket.emit('is-writing', {write:false, id:token})
-    } else if (e.which == 13 && chatActive == false) {
+    } 
+    else if (e.which == 13 && chatActive == false) {
         socket.emit("dataPseudo", { pseudo: $("#pseudo").val(), id: token });
         $("#pseudo").val("");
     }

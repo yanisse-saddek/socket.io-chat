@@ -80,9 +80,9 @@ io.on('connection', (socket)=>{
                     io.emit('newUserMessage', {messageInfo})
                     socket.broadcast.emit('room-msg', dataMessage.room)        
                 }
-                // else{
-                //     socket.emit('deco')
-                // }
+                else{
+                    socket.emit('deco')
+                }
             }
         }
     })
