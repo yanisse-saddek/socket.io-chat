@@ -66,6 +66,7 @@ io.on('connection', (socket)=>{
             if(dataMessage.message || dataMessage.files){
                 console.log(dataMessage)
                 if(getUser(dataMessage.id)){
+                    console.log(getUser(dataMessage.id))
                     var messageInfo = {
                         message:escapeHtml(dataMessage.message),
                         date:getDate(),
