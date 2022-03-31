@@ -34,7 +34,6 @@ io.on('connection', (socket)=>{
     })
     socket.on('dataPseudo', dataPseudo=>{
         var isNew = true
-        console.log("-----", userArrayList)
         userArrayList.map(user=>{
             if(user.id == dataPseudo.id){
                 isNew = false
@@ -64,7 +63,7 @@ io.on('connection', (socket)=>{
     socket.on('newMessage', dataMessage=>{
         if(tokenList.includes(dataMessage.id)){
             if(dataMessage.message || dataMessage.files){
-                console.log(dataMessage)
+                console.log(getUser(dataMessage.id))
                 if(getUser(dataMessage.id)){
                     console.log(getUser(dataMessage.id))
                     var messageInfo = {

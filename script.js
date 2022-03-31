@@ -430,7 +430,3 @@ function disconnect(){
     $(".login").css("display", "flex");
     chatActive = false
 }
-
-setInterval(() => {
-    socket.emit('ping', {actif:true, id:token});
-}, 1000);
