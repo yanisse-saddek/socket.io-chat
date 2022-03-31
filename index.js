@@ -65,7 +65,7 @@ io.on('connection', (socket)=>{
             if(dataMessage.message || dataMessage.files){
                 console.log("en dehors nn", getUser(dataMessage.id))
                 if(getUser(dataMessage.id) !== undefined){
-                    console.log(getUser("c bon laaaaaa -------->" ,dataMessage.id))
+                    console.log("c bon laaaaaaaaaaaaaaaaaaaaaaaaa ------>" , getUser(dataMessage.id))
                     var messageInfo = {
                         message:escapeHtml(dataMessage.message),
                         date:getDate(),
