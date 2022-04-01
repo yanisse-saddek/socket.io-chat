@@ -1,6 +1,6 @@
 const app = require('express')();
 const server = require('http').createServer(app);
-const io = require('socket.io')(server)
+const io = require('socket.io')(server, {pingInterval:5000})
 
 var userArrayList = []
 app.get('/', (req, res)=>{
@@ -34,12 +34,11 @@ io.on('connection', (socket)=>{
     })
     socket.on('dataPseudo', dataPseudo=>{
         var isNew = true
-        console.log(dataPseudo)
         userArrayList.map(user=>{
             if(user.id == dataPseudo.id){
                 isNew = false
             }
-        })        
+        })    
         if(tokenList.includes(dataPseudo.id)){
             if(isNew && dataPseudo.pseudo.length > 4){
                 var rand = Math.floor(Math.random() * images.length)
@@ -57,16 +56,14 @@ io.on('connection', (socket)=>{
                 userArrayList.push(newUser)
                 socket.emit('join', {newUser, Bot})
                 socket.broadcast.emit('newUserJoin', {newUser, Bot})
-                io.emit('user-count', userArrayList.length)    
+                io.emit('user-count', userArrayList.length)  
             }
         }
     })
     socket.on('newMessage', dataMessage=>{
         if(tokenList.includes(dataMessage.id)){
-            if(dataMessage.message || dataMessage.files){
-                console.log("en dehors nn", getUser(dataMessage.id))
-                if(getUser(dataMessage.id) !== undefined){
-                    console.log("c bon laaaaaaaaaaaaaaaaaaaaaaaaa ------>" , getUser(dataMessage.id))
+            if(getUser(dataMessage.id) !== undefined){
+                if(dataMessage.message || dataMessage.files){
                     var messageInfo = {
                         message:escapeHtml(dataMessage.message),
                         date:getDate(),
@@ -81,11 +78,18 @@ io.on('connection', (socket)=>{
                     io.emit('newUserMessage', {messageInfo})
                     socket.broadcast.emit('room-msg', dataMessage.room)        
                 }
-                else{
-                    socket.emit('deco')
-                }
+            }else{
+                socket.emit('deco')
             }
         }
+    })
+    socket.on('deco', ()=>{
+        userArrayList.map((user, index)=>{
+            if(user.id == socket.id){
+             userArrayList.splice(index, 1)
+            }
+         })
+         socket.emit('deco')
     })
     socket.on('new-mp', (dataNewMp)=>{
         if(tokenList.includes(dataNewMp.id)){
@@ -105,34 +109,6 @@ io.on('connection', (socket)=>{
             })
             io.emit('is-active', userArrayList)
         }
-    })
-    socket.on('is-writing', dataWriting=>{
-        if(tokenList.includes(dataWriting.id)){
-            var writingUser = null
-            var writingUserIndex = null
-            userArrayList.map((user, index)=>{
-                if(user.id == dataWriting.id){
-                    writingUser = user.pseudo
-                    writingUserIndex = index
-                }
-            })
-            if(dataWriting.write){
-                if(!usersWriting.includes(writingUser)){
-                    usersWriting.push(writingUser)
-                }
-            }else{
-                usersWriting.splice(writingUserIndex, 1)
-            }
-                socket.broadcast.emit('is-writing', usersWriting)
-        }
-    })
-    socket.on('deco', ()=>{
-        userArrayList.map((user, index)=>{
-            if(user.id == socket.id){
-             userArrayList.splice(index, 1)
-            }
-         })
-         console.log("USER MACHINNNN" , userArrayList)
     })
     socket.on('disconnect', () =>{
         userArrayList.map((user, index)=>{
@@ -174,7 +150,7 @@ function getUser(id){
             userPseudo =  user.pseudo
         }
     })
-    if(userPseudo !== null){
+    if(userPseudo !== null && userPseudo !== undefined){
         return userPseudo
     }
 }

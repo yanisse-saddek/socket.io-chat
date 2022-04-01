@@ -1,4 +1,7 @@
 var socket = io()
+setInterval(() => {
+    console.log(socket.id)
+}, 1000);
 
 var token = null;
 var imageId = [];
@@ -33,6 +36,7 @@ $("html").keydown(function (e) {
 });
 
 $("#logBtn").click((e) => {
+    socket.emit("get-token");
     e.preventDefault();
     socket.emit("dataPseudo", { pseudo: $("#pseudo").val(), id: token });
     $("#pseudo").val("");
@@ -347,12 +351,6 @@ socket.on("room-msg", (roomMsg) => {
         $(".select-room > ." + roomMsg + " ").addClass("new-msg");
     }
 });
-
-
-
-
-
-
 function validateAndUpload(input){
     var URL = window.URL || window.webkitURL;
     var file = input.files[0];
@@ -389,45 +387,18 @@ function validateAndUpload(input){
         }
     }
 }
-
-
 function removeFile(id) {
     filesList.splice(id - 1, 1);
     $("." + id + "").remove();
 }
-
-setInterval(() => {
-    if($('#message').val().length > 1){
-        socket.emit('is-writing', {write:true, id:token})
-    }else{
-        socket.emit('is-writing', {write:false, id:token})
-    }    
-}, 1000);
-
-socket.on('is-writing', (usersWriting)=>{
-//envoyer le pseudo par l'id du mec qui envoie la requete et comparer ici nsm
-
-    $('.typing-list').empty()
-        if(usersWriting.length){
-                $('.typing-list').append(`
-                <p>${            
-                    usersWriting.map(userWriting=>{
-                        return userWriting
-                    })
-                } est en train d'écrire<p>
-            `)
-        }
-
-})
-
 socket.on('deco', ()=>{
+    console.log('okiss')
     $(".user-list").empty();
     $(".login").css("display", "flex");
     chatActive = false
 })
 function disconnect(){
     socket.emit('deco')
-    $(".user-list").empty();
-    $(".login").css("display", "flex");
-    chatActive = false
 }
+
+
