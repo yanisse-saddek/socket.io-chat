@@ -90,14 +90,14 @@ io.on('connection', (socket)=>{
                                 console.log(tokenList, index+1)
                                 tokenList.splice(index+1, 1)
                                 console.log(tokenList, index+1)
-
+                                console.log(banInfo[1], "banned")
                                 var botMsg ={
                                     pseudo:"Bot",
-                                    message:user.pseudo + "à été banni",
+                                    message:user.pseudo + " a as été banni",
                                     image:"https://theawesomedaily.com/wp-content/uploads/2018/03/cats-wearing-glassess-25-1.jpeg",
                                     date:getDate()
                                 }
-                                socket.emit('bot-msg', botMsg)
+                                io.emit('bot-msg', botMsg)
                             }
                         })
                     }else{   

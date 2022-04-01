@@ -61,7 +61,6 @@ socket.on("join", (data) => {
     chatActive = true;
 });
 socket.on("bot-msg", (data) => {
-    console.log(data)
     lastMsg = data.pseudo
     $(".msg-list>.global").append(`
         <div class="message ${data.pseudo} actual">
@@ -71,11 +70,12 @@ socket.on("bot-msg", (data) => {
                 <p>${data.date}</p>
             </div>
             <div class="text">
-            <p>${data.message2}</p>
+            <p>${data.message}</p>
             </div>
         </div>
     `);
 });
+
 
 $("#btn").click(() => {
     socket.emit("newMessage", {
