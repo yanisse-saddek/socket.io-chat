@@ -13,6 +13,7 @@ var chatActive = false;
 socket.emit("get-token");
 socket.on("get-token", (newToken) => {
     token = newToken;
+    console.log(token)
 });
 
 $("html").keydown(function (e) {
@@ -43,32 +44,34 @@ $("#logBtn").click((e) => {
 });
 
 socket.on("join", (data) => {
+    lastMsg = data.pseudo
     $(".login").css("display", "none");
     $(".msg-list>.global").append(`
-            <div class="message ${data.Bot.pseudo} actual">
+            <div class="message ${data.pseudo} actual">
                 <div class="user">
-                    <img  height="50px" src=${data.Bot.image} />
-                    <div class="name">${data.Bot.pseudo}</div>
-                    <p>${data.Bot.date}</p>
+                    <img  height="50px" src=${data.image} />
+                    <div class="name">${data.pseudo}</div>
+                    <p>${data.date}</p>
                 </div>
                 <div class="text">
-                <p>Salut, ${data.newUser.pseudo} !</p>
+                <p>${data.message}</p>
                 </div>
             </div>
         `);
     chatActive = true;
 });
-socket.on("newUserJoin", (data) => {
-    lastMsg = data.Bot.pseudo
+socket.on("bot-msg", (data) => {
+    console.log(data)
+    lastMsg = data.pseudo
     $(".msg-list>.global").append(`
-        <div class="message ${data.Bot.pseudo} actual">
+        <div class="message ${data.pseudo} actual">
             <div class="user">
-                <img  height="50px" src=${data.Bot.image} />
-                <div class="name">${data.Bot.pseudo}</div>
-                <p>${data.Bot.date}</p>
+                <img  height="50px" src=${data.image} />
+                <div class="name">${data.pseudo}</div>
+                <p>${data.date}</p>
             </div>
             <div class="text">
-            <p>${data.newUser.pseudo} nous à rejoinds !</p>
+            <p>${data.message2}</p>
             </div>
         </div>
     `);
@@ -325,7 +328,6 @@ socket.on("new-mp", (data) => {
         }
     }
 });
-
 function openMP(className) {
     var oldRoomIDS = room;
     room = className;
@@ -334,6 +336,8 @@ function openMP(className) {
     $(".msg-list> .global").css("display", "none");
     $(".msg-list> ." + oldRoomIDS + "").css("display", "none");
     $(".msg-list> ." + className + "").css("display", "block");
+    var chatHistory = document.getElementById("msg-list");
+    chatHistory.scrollTop = chatHistory.scrollHeight;
 }
 function closeMP(className) {
     lastMsgPv = null;
@@ -344,8 +348,7 @@ function closeMP(className) {
         $(".msg-list> ." + className + "").css("display", "none");
         $(".msg-list>.global").css("display", "block");
     }
-}
-
+}   
 socket.on("room-msg", (roomMsg) => {
     if (roomMsg !== room) {
         $(".select-room > ." + roomMsg + " ").addClass("new-msg");

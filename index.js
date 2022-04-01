@@ -10,8 +10,8 @@ app.get('/*', (req, res)=>{
     res.sendFile(`${__dirname}/${req.path}`)
 })
 
-var tokenList = ["token"]
-var tokenAdmin = ['admin']
+var tokenList = ['token']
+// var tokenAdmin = ['admin']
 var images = [
     "https://theawesomedaily.com/wp-content/uploads/2018/03/cats-wearing-glassess-29-1.jpg",
     "https://theawesomedaily.com/wp-content/uploads/2018/03/cats-wearing-glassess-28-1.jpeg",
@@ -22,6 +22,8 @@ var images = [
 var listMsg = []
 var usersWriting = []
 io.on('connection', (socket)=>{
+    var address = socket.handshake.address;
+    console.log(address)
     socket.on('get-token', ()=>{
         tokenList.push(socket.id)
         socket.emit('get-token', socket.id)
@@ -51,11 +53,13 @@ io.on('connection', (socket)=>{
                 var Bot = {
                     pseudo:"Bot", 
                     image:"https://theawesomedaily.com/wp-content/uploads/2018/03/cats-wearing-glassess-25-1.jpeg",
+                    message:newUser.pseudo + "  bienvenue !",
+                    message2:newUser.pseudo + " à rejoinds le tchat!",
                     date:getDate()
                 }
                 userArrayList.push(newUser)
-                socket.emit('join', {newUser, Bot})
-                socket.broadcast.emit('newUserJoin', {newUser, Bot})
+                socket.emit('join', Bot)
+                socket.broadcast.emit('bot-msg', Bot)
                 io.emit('user-count', userArrayList.length)  
             }
         }
@@ -64,6 +68,8 @@ io.on('connection', (socket)=>{
         if(tokenList.includes(dataMessage.id)){
             if(getUser(dataMessage.id) !== undefined){
                 if(dataMessage.message || dataMessage.files){
+                    var test = dataMessage.message.substring(0, 4)
+                    var isCommand =false 
                     var messageInfo = {
                         message:escapeHtml(dataMessage.message),
                         date:getDate(),
@@ -72,13 +78,37 @@ io.on('connection', (socket)=>{
                         room:escapeHtml(dataMessage.room),
                         files:dataMessage.files
                     }
-                    if(messageInfo.room == "global"){
-                        listMsg.push(messageInfo)
+                    console.log(test)
+                    if(test == "!ban"){
+                        isCommand = true
                     }
-                    io.emit('newUserMessage', {messageInfo})
-                    socket.broadcast.emit('room-msg', dataMessage.room)        
+                    if(isCommand && messageInfo.user == "eugne"){
+                        var banInfo = dataMessage.message.split('!ban')
+                        userArrayList.map((user, index)=>{
+                            console.log(user.pseudo, banInfo[1])
+                            if(user.pseudo ==  banInfo[1].replace(' ', '')){
+                                console.log(tokenList, index+1)
+                                tokenList.splice(index+1, 1)
+                                console.log(tokenList, index+1)
+
+                                var botMsg ={
+                                    pseudo:"Bot",
+                                    message:user.pseudo + "à été banni",
+                                    image:"https://theawesomedaily.com/wp-content/uploads/2018/03/cats-wearing-glassess-25-1.jpeg",
+                                    date:getDate()
+                                }
+                                socket.emit('bot-msg', botMsg)
+                            }
+                        })
+                    }else{   
+                        if(messageInfo.room == "global"){
+                            listMsg.push(messageInfo)
+                        }
+                        io.emit('newUserMessage', {messageInfo})
+                        socket.broadcast.emit('room-msg', dataMessage.room)        
+                    }
                 }
-            }else{
+                }else{
                 socket.emit('deco')
             }
         }
