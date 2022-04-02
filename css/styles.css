@@ -55,9 +55,10 @@
 	width:80%;
 }
 .select-room{
-	background-color: khaki;
+	background-color: white;
 	padding:10px;
 	display: flex;
+	border-bottom:3px solid black;
 }
 .select-room p{
 	background-color: orange;
@@ -109,17 +110,18 @@
 }
 .message{
 	background-color: #e5e5ea;
-	max-width:50%;
+	max-width:90%;
 	min-width:30%;
 	overflow-wrap: break-word;
 	border-top-left-radius:30px;
 	border-top-right-radius:30px;
 	border-bottom-right-radius:30px;
+	border-bottom-left-radius:15px;
 	padding:10px;
 }
 .me{
 	background-color: #248bf5;
-	border-bottom-right-radius:0px !important;
+	border-bottom-right-marradius:15px !important;
 	border-bottom-left-radius:30px !important;
 	color:white
 }
@@ -213,7 +215,6 @@
 .info{
 	display: flex;
 	align-items: center;
-	width:60%;
 }
 .state{
 	width:20%;

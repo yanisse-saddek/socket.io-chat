@@ -104,7 +104,7 @@ io.on('connection', (socket)=>{
                         if(messageInfo.room == "global"){
                             listMsg.push(messageInfo)
                         }
-                        if(messageInfo.message.length > 0){
+                        if(messageInfo.message.length > 0 || messageInfo.files.length>0){
                             io.emit('newUserMessage', {messageInfo})
                             socket.broadcast.emit('room-msg', dataMessage.room)        
                         }

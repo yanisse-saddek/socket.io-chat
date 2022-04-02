@@ -1,8 +1,4 @@
 var socket = io()
-setInterval(() => {
-    console.log(socket.id)
-}, 1000);
-
 var token = null;
 var imageId = [];
 var filesList = [];
@@ -10,10 +6,10 @@ var room = "global";
 var lastMsg = "";
 var lastMsgPv = null;
 var chatActive = false;
+var userCount = 0
 socket.emit("get-token");
 socket.on("get-token", (newToken) => {
     token = newToken;
-    console.log(token)
 });
 
 $("html").keydown(function (e) {
@@ -96,7 +92,6 @@ $("#btn").click(() => {
 
 socket.on("newUserMessage", (data) => {
     var files = null;
-    console.log(data.messageInfo.files)
     if (data.messageInfo.files) {
         files = data.messageInfo.files;
     }
@@ -133,13 +128,11 @@ socket.on("newUserMessage", (data) => {
             messageHTML += word + " ";
         }
     });
-console.log(data.messageInfo.id, token)
     if (files) {
         files.map((file) => {
             imageHTML += "<img class='messageImg' src=" + file + " />";
         });
     }
-    console.log(data.messageInfo.room)
     if (data.messageInfo.room == "global") {
         if (data.messageInfo.user !== lastMsg) {
             lastMsg = data.messageInfo.user;
@@ -216,9 +209,7 @@ console.log(data.messageInfo.id, token)
 });
 
 socket.on("user-count", (count) => {
-    $(".count-user").html(`
-        ${count}
-        `);
+    userCount = count
 });
 
 setInterval(() => {
@@ -233,6 +224,11 @@ setInterval(() => {
 
 socket.on("is-active", (data) => {
     $(".user-list").empty();
+    $('.user-list').append(`
+    <div class="user-count">
+        <p>Utilisateurs connectés (<span class="count-user">${userCount}</span>)</p>
+    </div>
+    `)
     for (i = 0; i < data.length; i++) {
         var infoData = {
             data: data[i],
@@ -246,6 +242,7 @@ socket.on("is-active", (data) => {
                         <img class="pdp" src='${data[i].image}'/>
                         <p>${data[i].pseudo} (Moi)</p>
                     </div>
+                    <p onClick="disconnect()">deconnecter</p>
                 </div>
                 `);
         } else {
@@ -372,7 +369,6 @@ function validateAndUpload(input){
     var file = input.files[0];
 
     if (file){
-        console.log(typeof file.size)
         if(file.size > 600000){
             console.log('image trop lourde putin!')
         } else{
@@ -382,9 +378,7 @@ function validateAndUpload(input){
                 var uploaded_image = "";
                 const reader = new FileReader();
                 reader.addEventListener("load", () => {
-                    console.log('c une img')
                     uploaded_image = reader.result;
-                    console.log('uploaded', file)
                     var newImgId = "image" + (imageId.length + 1);
                     imageId.push(newImgId);
                     filesList.push(uploaded_image);
@@ -408,7 +402,6 @@ function removeFile(id) {
     $("." + id + "").remove();
 }
 socket.on('deco', ()=>{
-    console.log('okiss')
     $(".user-list").empty();
     $(".login").css("display", "flex");
     chatActive = false
