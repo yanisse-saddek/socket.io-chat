@@ -10,7 +10,7 @@ app.get('/*', (req, res)=>{
     res.sendFile(`${__dirname}/${req.path}`)
 })
 
-var tokenList = ['token']
+var tokenList = []
 // var tokenAdmin = ['admin']
 var images = [
     "https://theawesomedaily.com/wp-content/uploads/2018/03/cats-wearing-glassess-29-1.jpg",
@@ -53,8 +53,8 @@ io.on('connection', (socket)=>{
                 var Bot = {
                     pseudo:"Bot", 
                     image:"https://theawesomedaily.com/wp-content/uploads/2018/03/cats-wearing-glassess-25-1.jpeg",
-                    message:newUser.pseudo + "  bienvenue !",
-                    message2:newUser.pseudo + " à rejoinds le tchat!",
+                    message:newUser.pseudo + " à rejoinds le tchat!",
+                    message2:newUser.pseudo + "  bienvenue !",
                     date:getDate()
                 }
                 userArrayList.push(newUser)
@@ -67,7 +67,7 @@ io.on('connection', (socket)=>{
     socket.on('newMessage', dataMessage=>{
         if(tokenList.includes(dataMessage.id)){
             if(getUser(dataMessage.id) !== undefined){
-                if(dataMessage.message || dataMessage.files){
+                if(dataMessage.message.length|| dataMessage.files){
                     var test = dataMessage.message.substring(0, 4)
                     var isCommand =false 
                     var messageInfo = {
@@ -76,9 +76,9 @@ io.on('connection', (socket)=>{
                         user:getUser(dataMessage.id),
                         image:getImage(dataMessage.id),
                         room:escapeHtml(dataMessage.room),
-                        files:dataMessage.files
+                        files:dataMessage.files,
+                        id:dataMessage.id
                     }
-                    console.log(test)
                     if(test == "!ban"){
                         isCommand = true
                     }
@@ -87,9 +87,9 @@ io.on('connection', (socket)=>{
                         userArrayList.map((user, index)=>{
                             console.log(user.pseudo, banInfo[1])
                             if(user.pseudo ==  banInfo[1].replace(' ', '')){
-                                console.log(tokenList, index+1)
-                                tokenList.splice(index+1, 1)
-                                console.log(tokenList, index+1)
+                                socket.to(user.id).emit('refresh')
+                                tokenList.splice(index, 1)
+                                console.log(tokenList, index)
                                 console.log(banInfo[1], "banned")
                                 var botMsg ={
                                     pseudo:"Bot",
@@ -104,8 +104,10 @@ io.on('connection', (socket)=>{
                         if(messageInfo.room == "global"){
                             listMsg.push(messageInfo)
                         }
-                        io.emit('newUserMessage', {messageInfo})
-                        socket.broadcast.emit('room-msg', dataMessage.room)        
+                        if(messageInfo.message.length > 0){
+                            io.emit('newUserMessage', {messageInfo})
+                            socket.broadcast.emit('room-msg', dataMessage.room)        
+                        }
                     }
                 }
                 }else{

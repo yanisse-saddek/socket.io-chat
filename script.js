@@ -47,15 +47,17 @@ socket.on("join", (data) => {
     lastMsg = data.pseudo
     $(".login").css("display", "none");
     $(".msg-list>.global").append(`
-            <div class="message ${data.pseudo} actual">
+            <div class="msg-line ${data.pseudo} actual">
+            <div class="message">
                 <div class="user">
                     <img  height="50px" src=${data.image} />
                     <div class="name">${data.pseudo}</div>
                     <p>${data.date}</p>
                 </div>
                 <div class="text">
-                <p>${data.message}</p>
+                <p>${data.message2}</p>
                 </div>
+            </div>
             </div>
         `);
     chatActive = true;
@@ -63,7 +65,8 @@ socket.on("join", (data) => {
 socket.on("bot-msg", (data) => {
     lastMsg = data.pseudo
     $(".msg-list>.global").append(`
-        <div class="message ${data.pseudo} actual">
+        <div class="msg-line ${data.pseudo} actual">
+        <div class="message">
             <div class="user">
                 <img  height="50px" src=${data.image} />
                 <div class="name">${data.pseudo}</div>
@@ -71,6 +74,7 @@ socket.on("bot-msg", (data) => {
             </div>
             <div class="text">
             <p>${data.message}</p>
+            </div>
             </div>
         </div>
     `);
@@ -129,42 +133,46 @@ socket.on("newUserMessage", (data) => {
             messageHTML += word + " ";
         }
     });
-
+console.log(data.messageInfo.id, token)
     if (files) {
         files.map((file) => {
             imageHTML += "<img class='messageImg' src=" + file + " />";
         });
     }
-
+    console.log(data.messageInfo.room)
     if (data.messageInfo.room == "global") {
         if (data.messageInfo.user !== lastMsg) {
             lastMsg = data.messageInfo.user;
             $(".global> .actual").removeClass("actual");
             $(".msg-list>.global").append(`
-                    <div class="message ${data.messageInfo.user} actual">
-                        <div class="user">
-                            <img  height="50px" src=${data.messageInfo.image} />
-                            <div class="name">${data.messageInfo.user}</div>
-                            <p>${data.messageInfo.date}</p>
-                        </div>
+                    <div class="msg-line ${data.messageInfo.user} ${data.messageInfo.id == token?"right":null} actual">
+                    <div class="${data.messageInfo.id == token?"me":"null"} message">
+                            <div class="user ${data.messageInfo.id == token ? "me": null}">
+                                <img  height="50px" src=${data.messageInfo.image} />
+                                <div class="name">${data.messageInfo.user}</div>
+                                    <p>${data.messageInfo.date}</p>
+                                </div>
                             <div class="text">
                             <p>
                                 ${messageHTML}
                                 <div>
-                                ${imageHTML}
+                                    ${imageHTML}
                                 </div>
                             </p>
                             </div>
                         </div>
+                    </div>
                 `);
         } else {
-            $(".msg-list> .global > .actual").append(`
+            $(".msg-list> .global >.actual").append(`
+            <div style="margin-top:10px;" class="${data.messageInfo.id == token?"me":"null"} message">
                 <p>
                     ${messageHTML}
                     <div>
                     ${imageHTML}
                     </div>
                 </p>
+            </div>
                 `);
         }
     } else {
@@ -172,29 +180,34 @@ socket.on("newUserMessage", (data) => {
             lastMsgPv = data.messageInfo.user;
             $("." + data.messageInfo.room + "> .actuale").removeClass("actuale");
             $(".msg-list> ." + data.messageInfo.room + "").append(`
-                <div class="message ${data.messageInfo.user} actuale">
-                    <div class="user">
+            <div class="msg-line ${data.messageInfo.user} ${data.messageInfo.id == token?"right":null} actuale">
+                <div class="${data.messageInfo.id == token?"me":"null"} message">
+                    <div class="user ${data.messageInfo.id == token ? "me": null}">
                         <img  height="50px" src=${data.messageInfo.image} />
                         <div class="name">${data.messageInfo.user}</div>
-                        <p>${data.messageInfo.date}</p>
-                    </div>
-                    <div class="text">
-                    <p>
-                        ${messageHTML}
-                        <div>
-                        ${imageHTML}
+                            <p>${data.messageInfo.date}</p>
                         </div>
-                    </p>
+                        <div class="text">
+                        <p>
+                            ${messageHTML}
+                            <div>
+                            ${imageHTML}
+                            </div>
+                        </p>
+                        </div>
                     </div>
-                </div>`);
+                </div>
+            </div>`);
         } else {
             $(".msg-list> ." + data.messageInfo.room + " > .actuale").append(`
+            <div style="margin-top:10px;" class="${data.messageInfo.id == token?"me":"null"} message">
                 <p>
                     ${messageHTML}
                     <div>
                     ${imageHTML}
                     </div>
                 </p>
+            </div>
                 `);
         }
     }
@@ -286,10 +299,10 @@ function newMP(data) {
         ) {
         } else {
             $(".msg-list").append(`
-            <div class="${className2}"> 
+            <div class="${className2} room-chat"> 
             <div/>
             `);
-            $(".msg-list> ." + className + "").css("display", "none");
+            $(".msg-list> ." + className + ", .room-chat").css("display", "none");
         }
     }
 }
@@ -321,10 +334,10 @@ socket.on("new-mp", (data) => {
         ) {
         } else {
             $(".msg-list").append(`
-            <div class="${className2}"> 
+            <div class="${className2} room-chat"> 
             <div/>
             `);
-            $(".msg-list> ." + className2 + "").css("display", "none");
+            $(".msg-list> ." + className2 + ".room-chat").css("display", "none");
         }
     }
 });
@@ -403,5 +416,6 @@ socket.on('deco', ()=>{
 function disconnect(){
     socket.emit('deco')
 }
-
-
+socket.on('refresh', ()=>{
+    location.reload()
+})

@@ -67,16 +67,17 @@
 }
 .select-room .room{
 	display: flex;
-	background-color: orange;
 	align-items: center;
 	justify-content: center;
 	border-radius: 30px;
 	padding:3px;
 }
 .msg-list{
-	background-color: var(--primary);
+	background-color: white;
 	height:90%;
 	overflow-y: auto;
+	display: flex;
+	justify-content: center;
 }
 .user-section{
 	background-color: var(--secondary);
@@ -95,14 +96,37 @@
 .user-list{
 	padding:0.2rem;
 }
-.message{
+
+.room-chat	{
+	width:95%;
 	padding:10px;
-	background-color: lightgray;
-	margin-bottom:1px
+}
+.msg-line{
+	padding:10px;
+	margin-bottom:10px;
+	display: flex;
+	flex-direction: column;
+}
+.message{
+	background-color: #e5e5ea;
+	max-width:50%;
+	min-width:30%;
+	overflow-wrap: break-word;
+	border-top-left-radius:30px;
+	border-top-right-radius:30px;
+	border-bottom-right-radius:30px;
+	padding:10px;
+}
+.me{
+	background-color: #248bf5;
+	border-bottom-right-radius:0px !important;
+	border-bottom-left-radius:30px !important;
+	color:white
 }
 .message .user{
 	display: flex;
 	align-items: center;
+	justify-content: space-around;
 }
 .message .user .name{
 	font-size: 1.2rem;
@@ -210,4 +234,14 @@
 .messageImg{
 	max-width:200px;
 	max-height:100px;
+}
+
+.right{
+	display:flex;
+	flex-direction: column;
+	align-items: flex-end;
+	justify-content: flex-end;
+}
+.me{
+	flex-direction: row-reverse;
 }
