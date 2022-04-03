@@ -150,7 +150,7 @@ socket.on("newUserMessage", (data) => {
                     <div class="${data.messageInfo.id == token?"me":"null"} message">
                             <div class="user ${data.messageInfo.id == token ? "me": null}">
                                 ${PictureHTML}
-                            <div class="name">${data.messageInfo.user}</div>
+                            <div class="name" style="margin-right:20px">${data.messageInfo.user}</div>
                                     <p>${data.messageInfo.date}</p>
                                 </div>
                             <div class="text">
@@ -185,7 +185,7 @@ socket.on("newUserMessage", (data) => {
                 <div class="${data.messageInfo.id == token?"me":"null"} message">
                     <div class="user ${data.messageInfo.id == token ? "me": null}">
                         <img  height="50px" src=${data.messageInfo.image} />
-                        <div class="name">${data.messageInfo.user}</div>
+                        <div class="name" style="margin-right:20px" >${data.messageInfo.user}</div>
                             <p>${data.messageInfo.date}</p>
                         </div>
                         <div class="text">
