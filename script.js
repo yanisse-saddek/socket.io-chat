@@ -1,4 +1,8 @@
 var socket = io()
+setInterval(() => {
+    console.log(socket.id)
+}, 1000);
+
 var token = null;
 var imageId = [];
 var filesList = [];
@@ -98,6 +102,7 @@ socket.on("newUserMessage", (data) => {
     message = data.messageInfo.message.split(" ");
     var messageHTML = "";
     var imageHTML = "";
+    var PictureHTML = "";
     message.map((word) => {
         var checkLink = word.split("");
         var isLink = false;
@@ -133,6 +138,9 @@ socket.on("newUserMessage", (data) => {
             imageHTML += "<img class='messageImg' src=" + file + " />";
         });
     }
+    if(data.messageInfo.id !== token){
+        PictureHTML = '<img  height="50px" src='+data.messageInfo.image+' />'
+    }
     if (data.messageInfo.room == "global") {
         if (data.messageInfo.user !== lastMsg) {
             lastMsg = data.messageInfo.user;
@@ -141,8 +149,8 @@ socket.on("newUserMessage", (data) => {
                     <div class="msg-line ${data.messageInfo.user} ${data.messageInfo.id == token?"right":null} actual">
                     <div class="${data.messageInfo.id == token?"me":"null"} message">
                             <div class="user ${data.messageInfo.id == token ? "me": null}">
-                                <img  height="50px" src=${data.messageInfo.image} />
-                                <div class="name">${data.messageInfo.user}</div>
+                                ${PictureHTML}
+                            <div class="name">${data.messageInfo.user}</div>
                                     <p>${data.messageInfo.date}</p>
                                 </div>
                             <div class="text">
@@ -204,6 +212,7 @@ socket.on("newUserMessage", (data) => {
                 `);
         }
     }
+
     var chatHistory = document.getElementById("msg-list");
     chatHistory.scrollTop = chatHistory.scrollHeight;
 });
@@ -369,6 +378,7 @@ function validateAndUpload(input){
     var file = input.files[0];
 
     if (file){
+        console.log(typeof file.size)
         if(file.size > 600000){
             console.log('image trop lourde putin!')
         } else{
