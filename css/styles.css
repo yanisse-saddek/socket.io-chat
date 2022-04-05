@@ -301,26 +301,22 @@
 	animation: fadeInLeft 0.3s forwards;  
 }
 .unload{
-	animation: fadeInRight 0.3s backwards;
+	animation: fadeInRight 0.3s forwards;
   
 }
 @keyframes fadeInLeft {
 	0% {
-	   transform: translateX(-12px);
-	   background-color: orange;
+	   transform: translateX(-200px);
 	}
 	100% {
-	   transform: translateX(10%);
-	   background-color: red;
+	   transform: translateX(0%);
 	}
 }	 
 @keyframes fadeInRight {
 	0% {
-		transform: translateX(10%);
-		background-color: orange;
+		transform: translateX(0%);
 	}
 	100% {
-		transform: translateX(-12000px);
-	   background-color: red;
+		transform: translateX(-200px);
 	}
 }	 
