@@ -14,10 +14,7 @@ var tokenList = []
 // var tokenAdmin = ['admin']
 var images = [
     "https://theawesomedaily.com/wp-content/uploads/2018/03/cats-wearing-glassess-29-1.jpg",
-    "https://theawesomedaily.com/wp-content/uploads/2018/03/cats-wearing-glassess-28-1.jpeg",
-    "https://theawesomedaily.com/wp-content/uploads/2018/03/cats-wearing-glassess-27-1.jpeg",
-    "https://theawesomedaily.com/wp-content/uploads/2018/03/cats-wearing-glassess-26-1.jpeg",
-    "https://theawesomedaily.com/wp-content/uploads/2018/03/cats-wearing-glassess-25-1.jpeg",
+    "https://media.discordapp.net/attachments/931498624024715319/949347645305012224/Snapchat-1670430018.jpg?width=420&height=596",
 ];
 var listMsg = []
 var usersWriting = []

@@ -249,9 +249,9 @@ socket.on("is-active", (data) => {
                 <div style="border-bottom:2px solid black"class="user-card">
                     <div class="info">
                         <img class="pdp" src='${data[i].image}'/>
-                        <p>${data[i].pseudo} (Moi)</p>
+                        <p>${data[i].pseudo}</p>
                     </div>
-                    <p onClick="disconnect()">deconnecter</p>
+                    <svg onClick="disconnect()" height="15px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M160 416H96c-17.67 0-32-14.33-32-32V128c0-17.67 14.33-32 32-32h64c17.67 0 32-14.33 32-32S177.7 32 160 32H96C42.98 32 0 74.98 0 128v256c0 53.02 42.98 96 96 96h64c17.67 0 32-14.33 32-32S177.7 416 160 416zM502.6 233.4l-128-128c-12.51-12.51-32.76-12.49-45.25 0c-12.5 12.5-12.5 32.75 0 45.25L402.8 224H192C174.3 224 160 238.3 160 256s14.31 32 32 32h210.8l-73.38 73.38c-12.5 12.5-12.5 32.75 0 45.25s32.75 12.5 45.25 0l128-128C515.1 266.1 515.1 245.9 502.6 233.4z"/></svg>
                 </div>
                 `);
         } else {
@@ -276,6 +276,7 @@ socket.on("is-active", (data) => {
 
 
 function newMP(data) {
+    console.log(data)
     socket.emit("new-mp", { data: data, id: token });
     var className = data.senderID + data.data.id;
     var className2 = data.data.id + data.senderID;
@@ -292,9 +293,12 @@ function newMP(data) {
             $(".select-room> ." + className2 + "").css("display", "flex");
         } else {
             $(".select-room").append(`
-            <div class="${className2} room">
-                <p onclick="openMP('${className2}')">${data.data.pseudo}</p>
+            <div class="${className2} room" onclick="openMP('${className2}')" >
+            <img src="${data.data.image}" />
+            <div class="flex">
+                <p>${data.data.pseudo}</p>
                 <p class="close" onClick="closeMP('${className2}')">X</p>
+            </div>
             </div>
             `);
         }
@@ -314,10 +318,11 @@ function newMP(data) {
 }
 
 socket.on("new-mp", (data) => {
-    var sender = data.dataNewMp.data.senderID;
-    var receiver = data.dataNewMp.data.data.id;
-    var className = sender + receiver;
-    var className2 = receiver + sender;
+    var sender = data.dataNewMp.data;
+    var receiver = data.dataNewMp.data.data;
+    var className = sender.senderID + receiver.id;
+    var className2 = receiver.id + sender.senderID;
+    console.log(data)
     if ($(".msg-list> ." + className + "").length) {
         $(".select-room> ." + className + "").css("display", "flex");
     } else {
@@ -328,9 +333,12 @@ socket.on("new-mp", (data) => {
             $(".select-room> ." + className2 + "").css("display", "flex");
         } else {
             $(".select-room").append(`
-            <div class="${className2} room">
-                <p onclick="openMP('${className2}')">${data.user.pseudo}</p>
-                <p class="close" onClick="closeMP('${className2}')">X</p>
+            <div class="${className2} room" onclick="openMP('${className2}')">
+                <img src="${data.user.image}" />
+                <div class="flex">
+                    <p>${data.user.pseudo}</p>
+                    <p class="close" onClick="closeMP('${className2}')">X</p>
+                </div>
             </div>
             `);
         }
@@ -380,7 +388,7 @@ function validateAndUpload(input){
     if (file){
         console.log(typeof file.size)
         if(file.size > 600000){
-            console.log('image trop lourde putin!')
+            console.log('image trop lourde !')
         } else{
             var image = new Image();
             image.onload = function() {
@@ -422,3 +430,14 @@ function disconnect(){
 socket.on('refresh', ()=>{
     location.reload()
 })
+
+function showUserList(){
+    if ($(".user-section").hasClass('load')) {
+        $(".user-section").addClass( "unload" );
+        $(".user-section").removeClass( "load" );
+      } else {
+        $(".user-section").addClass( "load" );
+        $(".user-section").removeClass( "unload" );
+      }
+      
+}
