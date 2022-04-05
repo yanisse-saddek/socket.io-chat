@@ -306,7 +306,7 @@
 }
 @keyframes fadeInLeft {
 	0% {
-	   transform: translateX(-200px);
+	   transform: translateX(-600px);
 	}
 	100% {
 	   transform: translateX(0%);
@@ -317,6 +317,6 @@
 		transform: translateX(0%);
 	}
 	100% {
-		transform: translateX(-200px);
+		transform: translateX(-600px);
 	}
 }	 
