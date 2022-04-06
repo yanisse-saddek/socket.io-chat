@@ -54,7 +54,6 @@
 	width:100%;
 }
 .select-room{
-	background-color: white;
 	padding:10px;
 	display: flex;
 	border-bottom:3px solid #e5e5ea;
@@ -78,16 +77,15 @@
 	border-radius: 30px;
 }
 .msg-list{
-	background-color: white;
 	height:90%;
 	overflow-y: auto;
 	display: flex;
 	justify-content: center;
 }
 .user-section{
-	background-color: var(--secondary);
+	background-color: white !important;
 	height:100%;
-	width:40%;
+	width:60%;
 	font-size: 0.7rem;
 	overflow-y: auto;
 	position: absolute;
@@ -135,7 +133,7 @@
 	align-items: center;
 }
 .message .user .name{
-	font-size: 1.2rem;
+	font-size: 0.9rem;
 	font-weight: bold;
 }
 .message .text{
@@ -241,6 +239,9 @@
 
 .new-msg{
 	background-color: red !important;
+	height:10px;
+	width:10px;
+	border-radius: 30px;
 }
 .messageImg{
 	max-width:200px;
@@ -290,6 +291,8 @@
 
 .flex{
 	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 .toggle-userlist{
 	width:30px; 
@@ -306,7 +309,7 @@
 }
 @keyframes fadeInLeft {
 	0% {
-	   transform: translateX(-600px);
+	   transform: translateX(-100%);
 	}
 	100% {
 	   transform: translateX(0%);
@@ -317,6 +320,10 @@
 		transform: translateX(0%);
 	}
 	100% {
-		transform: translateX(-600px);
+		transform: translateX(-100%);
 	}
 }	 
+
+.dark{
+	background-color: #13121226 !important;
+}

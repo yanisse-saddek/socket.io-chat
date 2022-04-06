@@ -37,10 +37,9 @@ $("html").keydown(function (e) {
 });
 
 $("#logBtn").click((e) => {
-    socket.emit("get-token");
-    e.preventDefault();
-    socket.emit("dataPseudo", { pseudo: $("#pseudo").val(), id: token });
-    $("#pseudo").val("");
+        socket.emit("dataPseudo", { pseudo: $("#pseudo").val(), id: token });
+        $("#pseudo").val("");
+        console.log('ok')
 });
 
 socket.on("join", (data) => {
@@ -95,37 +94,37 @@ $("#btn").click(() => {
 });
 
 socket.on("newUserMessage", (data) => {
-    var files = null;
-    if (data.messageInfo.files) {
-        files = data.messageInfo.files;
-    }
-    message = data.messageInfo.message.split(" ");
-    var messageHTML = "";
-    var imageHTML = "";
-    var PictureHTML = "";
-    message.map((word) => {
-        var checkLink = word.split("");
-        var isLink = false;
-        var isImage = false;
-        var wordLowerCase = word.toLowerCase();
-        if (
+        var files = null;
+        if (data.messageInfo.files) {
+            files = data.messageInfo.files;
+        }
+        message = data.messageInfo.message.split(" ");
+        var messageHTML = "";
+        var imageHTML = "";
+        var PictureHTML = "";
+        message.map((word) => {
+            var checkLink = word.split("");
+            var isLink = false;
+            var isImage = false;
+            var wordLowerCase = word.toLowerCase();
+            if (
             word.substring(word.length - 4) == ".jpg" ||
             word.substring(word.length - 4) == ".png"
-        ) {
-            isImage = true;
-        } else if (checkLink.includes(".")) {
+            ) {
+                isImage = true;
+            } else if (checkLink.includes(".")) {
             isLink = true;
         }
         if (
             (wordLowerCase.startsWith("http://") ||
-                wordLowerCase.startsWith("https://")) &&
+            wordLowerCase.startsWith("https://")) &&
             isLink
         ) {
             messageHTML +=
-                "<a href=" + word + " target='_blank'>" + word + "</a>" + " ";
+            "<a href=" + word + " target='_blank'>" + word + "</a>" + " ";
         } else if (
             (wordLowerCase.startsWith("http://") ||
-                wordLowerCase.startsWith("https://")) &&
+            wordLowerCase.startsWith("https://")) &&
             isImage
         ) {
             imageHTML += "<img class='messageImg' src=" + word + " />";
@@ -155,10 +154,10 @@ socket.on("newUserMessage", (data) => {
                                 </div>
                             <div class="text">
                             <p>
-                                ${messageHTML}
-                                <div>
-                                    ${imageHTML}
-                                </div>
+                            ${messageHTML}
+                            <div>
+                            ${imageHTML}
+                            </div>
                             </p>
                             </div>
                         </div>
@@ -167,7 +166,7 @@ socket.on("newUserMessage", (data) => {
         } else {
             $(".msg-list> .global >.actual").append(`
             <div style="margin-top:10px;" class="${data.messageInfo.id == token?"me":"null"} message">
-                <p>
+            <p>
                     ${messageHTML}
                     <div>
                     ${imageHTML}
@@ -197,24 +196,24 @@ socket.on("newUserMessage", (data) => {
                         </p>
                         </div>
                     </div>
-                </div>
+                    </div>
             </div>`);
         } else {
             $(".msg-list> ." + data.messageInfo.room + " > .actuale").append(`
             <div style="margin-top:10px;" class="${data.messageInfo.id == token?"me":"null"} message">
-                <p>
-                    ${messageHTML}
-                    <div>
+            <p>
+            ${messageHTML}
+            <div>
                     ${imageHTML}
                     </div>
-                </p>
-            </div>
-                `);
-        }
-    }
-
-    var chatHistory = document.getElementById("msg-list");
-    chatHistory.scrollTop = chatHistory.scrollHeight;
+                    </p>
+                    </div>
+                    `);
+                }
+            }
+            
+            var chatHistory = document.getElementById("msg-list");
+            chatHistory.scrollTop = chatHistory.scrollHeight;
 });
 
 socket.on("user-count", (count) => {
@@ -257,10 +256,10 @@ socket.on("is-active", (data) => {
         } else {
             $(".user-list").append(`
                 <div class="user-card ${data[i].pseudo} ">
-                    <div class="state">
-                        <div class="${data[i].actif}"></div>
-                    </div>
                     <div class="info">
+                        <div class="state">
+                            <div class="${data[i].actif}"></div>
+                        </div>
                         <img class="pdp" src='${data[i].image}'/>
                         <p>${data[i].pseudo}</p>
                     </div>
@@ -297,7 +296,6 @@ function newMP(data) {
             <img src="${data.data.image}" />
             <div class="flex">
                 <p>${data.data.pseudo}</p>
-                <p class="close" onClick="closeMP('${className2}')">X</p>
             </div>
             </div>
             `);
@@ -310,6 +308,7 @@ function newMP(data) {
         } else {
             $(".msg-list").append(`
             <div class="${className2} room-chat"> 
+            <p class="close" onClick="closeMP('${className2}')">X</p>
             <div/>
             `);
             $(".msg-list> ." + className + ", .room-chat").css("display", "none");
@@ -337,7 +336,6 @@ socket.on("new-mp", (data) => {
                 <img src="${data.user.image}" />
                 <div class="flex">
                     <p>${data.user.pseudo}</p>
-                    <p class="close" onClick="closeMP('${className2}')">X</p>
                 </div>
             </div>
             `);
@@ -349,6 +347,7 @@ socket.on("new-mp", (data) => {
         } else {
             $(".msg-list").append(`
             <div class="${className2} room-chat"> 
+            <p class="close" onClick="closeMP('${className2}')">X</p>
             <div/>
             `);
             $(".msg-list> ." + className2 + ".room-chat").css("display", "none");
@@ -359,7 +358,7 @@ function openMP(className) {
     var oldRoomIDS = room;
     room = className;
     lastMsgPv = null;
-    $(".select-room > ." + room + " ").removeClass("new-msg");
+    $(".select-room > ." + room + "> .flex > .new-msg").remove();
     $(".msg-list> .global").css("display", "none");
     $(".msg-list> ." + oldRoomIDS + "").css("display", "none");
     $(".msg-list> ." + className + "").css("display", "block");
@@ -377,8 +376,11 @@ function closeMP(className) {
     }
 }   
 socket.on("room-msg", (roomMsg) => {
-    if (roomMsg !== room) {
-        $(".select-room > ." + roomMsg + " ").addClass("new-msg");
+    if (roomMsg !== room && !$(".select-room> ." + roomMsg + "> .flex > .new-msg").length) {
+        $(".select-room > ." + roomMsg + "> .flex").append(`
+            <div class="new-msg">
+            </div>
+        `);
     }
 });
 function validateAndUpload(input){
@@ -432,6 +434,8 @@ socket.on('refresh', ()=>{
 })
 
 function showUserList(){
+    $('.chat').toggleClass('dark')
+
     if ($(".user-section").hasClass('load')) {
         $(".user-section").addClass( "unload" );
         $(".user-section").removeClass( "load" );
