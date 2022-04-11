@@ -445,3 +445,13 @@ function showUserList(){
       }
       
 }
+
+socket.on('already-exist', ()=>{
+    $('.already-exist').css('display', 'flex')
+})
+socket.on('too-short', ()=>{
+    $('.too-short').css('display', 'flex')
+})
+socket.on('too-long', ()=>{
+    $('.too-long').css('display', 'flex')
+})

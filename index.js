@@ -39,7 +39,16 @@ io.on('connection', (socket)=>{
             }
         })    
         if(tokenList.includes(dataPseudo.id)){
-            if(isNew && dataPseudo.pseudo.length > 4){
+            if(!isNew){
+                socket.emit('already-exist')
+            }
+            else if(dataPseudo.pseudo.length > 18){
+                socket.emit('too-long')
+            }
+            else if(dataPseudo.pseudo.length < 3){
+                socket.emit('too-short')
+            }
+            else if(isNew && dataPseudo.pseudo.length > 4){
                 var rand = Math.floor(Math.random() * images.length)
                 var randImg = images[rand]
                 var newUser = {
